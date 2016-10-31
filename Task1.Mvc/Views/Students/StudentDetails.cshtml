@@ -1,0 +1,95 @@
+﻿@model Task1.Mvc.Models.StudentViewModel
+
+@{
+    ViewBag.Title = "StudentDetails";
+}
+
+<!-- Begin panel area -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h1 class="panel-title">Student Details</h1>
+        
+    </div>
+    <div class="panel-body">
+        <h1>@Model.FirstName  @Model.Surname</h1>
+    </div>
+</div>
+<!-- End panel area -->  
+
+<!-- Begin properties area -->  
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Surname)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Surname)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Gender)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Gender)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DOB)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DOB)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Address1)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Address1)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Address2)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Address2)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Address3)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Address3)
+            </dd>
+        </dl>
+    </div>
+<!-- End properties area --> 
+
+<!-- Begin courses list area -->
+<div class="table-responsive">
+    <table class="table table-condensed table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="hidden">Id</th>
+                <th>Courses</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model.Courses)
+            {
+                <tr>
+                    <td class="hidden">@course.Id</td>
+                    <td>@course.Name</td>
+                    <td>@Html.ActionLink("View details", "details", "courses", new { id = course.Id }, null)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<!-- End courses list area -->
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>

@@ -1,0 +1,134 @@
+﻿@model Task1.Mvc.Models.StudentsModel
+
+@{
+    ViewBag.Title = "Students Management";
+}
+
+@using (Html.BeginForm())
+{ 
+    <!-- Begin hidden area -->
+    <div>
+        @Html.HiddenFor(m => m.EventCommand)
+        @Html.HiddenFor(m => m.EventArgument)
+    </div>
+    <!-- End hidden area -->
+    
+    <!-- Begin search area -->
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h1 class="panel-title">Search for students</h1>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                @Html.LabelFor(m => m.SearchCriteria, "Student Name")
+                @Html.TextBoxFor(m => m.SearchCriteria, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button id="btnSearch" class="btn btn-sm btn-primary"
+                    data-pdsa-action="search">Search</button>
+            <button id="btnReset" class="btn btn-sm btn-primary"
+                    data-pdsa-action="resetSearch">Reset</button>
+        </div>
+    </div>
+    <!-- End search area -->
+
+    <!-- End list area -->
+    <div class="table-responsive">
+        <table class="table table-condensed table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="hidden">Id</th>
+                    <th>First Name</th>
+                    <th>Surname</th>
+                    <th>Gender</th>
+                    <th>DOB</th>
+                    <th>Address 1</th>
+                    <th>No. of Courses</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in Model.Students)
+                { 
+                    <tr>
+                        <td class="hidden">@student.Id</td>
+                        <td>@student.FirstName</td>
+                        <td>@student.Surname</td>
+                        <td>@student.Gender</td>
+                        <td>@student.DOB.ToShortDateString()</td>
+                        <td>@student.Address1</td>
+                        <td>@student.Courses.Count()</td>
+                        <td>@Html.ActionLink("View details", "details", new { id = student.Id })</td>  
+                        <td class="pdsa-action-button-column">
+                            <a href="#" data-pdsa-action="delete"
+                               data-pdsa-val="@student.Id"
+                               onclick="return confirm('Delete this Student?');"
+                               class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </td>                      
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>@Html.ActionLink("Add Student", "add")</div>
+    </div>
+    <!-- End list area -->
+    
+	<!-- Pager area -->
+    <div>
+        @if (Model.EventCommand !="search" && Model.Pager != null && Model.Pager.EndPage > 1)
+        {
+            <ul class="pagination">
+                @if (Model.Pager.CurrentPage > 1)
+                {
+                    <li>
+                        <a href="~/Students">First</a>
+                    </li>
+                    <li>
+                        <a href="~/Students?page=@(Model.Pager.CurrentPage - 1)">Previous</a>
+                    </li>
+                }
+
+                @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                {
+                    <li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
+                        <a href="~/Students?page=@page">@page</a>
+                    </li>
+                }
+
+                @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                {
+                    <li>
+                        <a href="~/Students?page=@(Model.Pager.CurrentPage + 1)">Next</a>
+                    </li>
+                    <li>
+                        <a href="~/Students?page=@(Model.Pager.TotalPages)">Last</a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+    <!-- End pager area -->
+}
+
+@section scripts {
+
+    <script>
+    $(document).ready(function () {
+      $("[data-pdsa-action]").on("click", function (e) {
+        e.preventDefault();
+
+        $("#EventCommand").val(
+            $(this).data("pdsa-action"));
+
+        $("#EventArgument").val(
+            $(this).attr("data-pdsa-val"));
+
+        $("form").submit();
+      });
+    });
+    </script>
+
+}
